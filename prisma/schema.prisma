@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String @unique
+  imageUrl String
+  bio      String
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  following  Follow[] @relation("Following")
+  followedBy Follow[] @relation("FollowedBy")
+  recipes    Recipe[] @relation("Owner")
+  ratings    Rating[] @relation("Owner")
+}
+
+model Follow {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String @db.ObjectId
+  followingId String @db.ObjectId
+
+  follower  User @relation(name: "Following", fields: [followerId], references: [id])
+  following User @relation(name: "FollowedBy", fields: [followingId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recipe {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  prepTime    Int
+  ratingsId   String
+  ingredients Ingredient[]
+  stepsId     String
+  imagesUrl   String
+  userId      String       @db.ObjectId
+
+  user   User     @relation(name: "Owner", fields: [userId], references: [id])
+  rating Rating[] @relation("Ratings")
+  step   Step[]   @relation("Recipe")
+}
+
+model Rating {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  value    Int
+  comment  String
+  recipeId String @db.ObjectId
+  userId   String @db.ObjectId
+
+  user   User   @relation(name: "Owner", fields: [userId], references: [id])
+  recipe Recipe @relation(name: "Ratings", fields: [recipeId], references: [id])
+}
+
+model Ingredient {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  quantity String
+  recipeId String @db.ObjectId
+
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+}
+
+model Step {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  number   Int
+  content  String
+  recipeId String @db.ObjectId
+
+  recipe Recipe @relation(name: "Recipe", fields: [recipeId], references: [id])
+}

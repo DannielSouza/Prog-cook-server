@@ -7,7 +7,7 @@ import * as imageUploader from "../../helpers/imageUploader";
 
 jest.mock("bcrypt");
 jest.mock("firebase-admin");
-jest.mock("../helpers/imageUploader");
+jest.mock("../../helpers/imageUploader");
 
 describe("Create user", () => {
   const makeSut = () => {
@@ -16,7 +16,7 @@ describe("Create user", () => {
     (imageUploader.uploadImage as jest.Mock).mockResolvedValue("fakeImageUrl");
 
     const fakeImage = fs.createReadStream(
-      path.resolve(__dirname, "imageTest.png")
+      path.resolve("./src/services", "imageTest.png")
     );
 
     const authRepository = new authRepositoryInMemory();

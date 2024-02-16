@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { AuthService } from "../services/authService";
-import { PrismaAuthRepository } from "../repositories/prisma/authRepository";
+import { AuthService } from "../../services/authService/authService";
+import { PrismaAuthRepository } from "../../repositories/prisma/authRepository";
 
 const prismaAuthRepository = new PrismaAuthRepository();
 const authService = new AuthService(prismaAuthRepository);

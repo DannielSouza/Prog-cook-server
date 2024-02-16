@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import { uploadImage } from "../helpers/imageUploader";
-import { TUserRequest, UserDTO } from "../types/UserTypes";
-import { IAuthRepository } from "../repositories/IAuthRepository";
+import { uploadImage } from "../../helpers/imageUploader";
+import { TUserRequest, UserDTO } from "../../types/UserTypes";
+import { IAuthRepository } from "../../repositories/IAuthRepository";
 
 class AuthService {
   constructor(public authRepository: IAuthRepository) {}

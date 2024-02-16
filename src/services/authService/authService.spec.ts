@@ -1,9 +1,9 @@
-import { authRepositoryInMemory } from "../repositories/in-memory/authReposotory";
+import { authRepositoryInMemory } from "../../repositories/in-memory/authReposotory";
 import { AuthService } from "./authService";
 import bcrypt from "bcrypt";
 import * as fs from "fs";
 import * as path from "path";
-import * as imageUploader from "../helpers/imageUploader";
+import * as imageUploader from "../../helpers/imageUploader";
 
 jest.mock("bcrypt");
 jest.mock("firebase-admin");

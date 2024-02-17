@@ -1,17 +1,16 @@
 import { Request, Response } from "express";
-import { AuthService } from "../../services/signup/signupService";
+import { SignupService } from "../../services/signup/signupService";
 import { PrismaAuthRepository } from "../../repositories/prisma/userRepository";
 
 const prismaAuthRepository = new PrismaAuthRepository();
-const authService = new AuthService(prismaAuthRepository);
+const signupService = new SignupService(prismaAuthRepository);
 
 export const register = async (req: Request, res: Response) => {
-  console.log("Chamou a rota");
   const { name, email, bio, password, confirmPassword } = req.body;
   const files = req.files as Express.Multer.File | any;
 
   try {
-    const user = await authService.registerUser({
+    const user = await signupService.registerUser({
       name,
       email,
       bio,

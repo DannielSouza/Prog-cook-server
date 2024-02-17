@@ -1,5 +1,5 @@
 import { authRepositoryInMemory } from "../../repositories/in-memory/userReposotory";
-import { AuthService } from "./signupService";
+import { SignupService } from "./signupService";
 import bcrypt from "bcrypt";
 import * as fs from "fs";
 import * as path from "path";
@@ -20,12 +20,12 @@ describe("Create user", () => {
     );
 
     const authRepository = new authRepositoryInMemory();
-    const authService = new AuthService(authRepository);
-    return { fakeImage, authService, authRepository };
+    const signupService = new SignupService(authRepository);
+    return { fakeImage, signupService, authRepository };
   };
 
   it("should be able to create a new user", async () => {
-    const { authService, fakeImage } = makeSut();
+    const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       name: "valid_name",
@@ -36,13 +36,13 @@ describe("Create user", () => {
       images: [fakeImage as any],
     };
 
-    const user = await authService.registerUser(userData);
+    const user = await signupService.registerUser(userData);
     expect(imageUploader.uploadImage).toHaveBeenCalled();
     expect(user).toHaveProperty("id");
   });
 
   it("should throw an error if the email is already in use", async () => {
-    const { authService, fakeImage, authRepository } = makeSut();
+    const { signupService, fakeImage, authRepository } = makeSut();
     authRepository.exists = jest.fn().mockResolvedValue(true);
 
     const userData: any = {
@@ -54,13 +54,13 @@ describe("Create user", () => {
       images: [fakeImage as any],
     };
 
-    await expect(authService.registerUser(userData)).rejects.toThrow(
+    await expect(signupService.registerUser(userData)).rejects.toThrow(
       "O e-mail já está em uso"
     );
   });
 
   it("should throw an error if the name is not provided", async () => {
-    const { authService, fakeImage } = makeSut();
+    const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       bio: "valid_bio",
@@ -70,13 +70,13 @@ describe("Create user", () => {
       images: [fakeImage as any],
     };
 
-    await expect(authService.registerUser(userData)).rejects.toThrow(
+    await expect(signupService.registerUser(userData)).rejects.toThrow(
       "O nome é obrigatório"
     );
   });
 
   it("should throw an error if the email is not provided", async () => {
-    const { authService, fakeImage } = makeSut();
+    const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       name: "valid_name",
@@ -86,13 +86,13 @@ describe("Create user", () => {
       images: [fakeImage as any],
     };
 
-    await expect(authService.registerUser(userData)).rejects.toThrow(
+    await expect(signupService.registerUser(userData)).rejects.toThrow(
       "O e-mail é obrigatório"
     );
   });
 
   it("should throw an error if the password is not provided", async () => {
-    const { authService, fakeImage } = makeSut();
+    const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       name: "valid_name",
@@ -102,13 +102,13 @@ describe("Create user", () => {
       images: [fakeImage as any],
     };
 
-    await expect(authService.registerUser(userData)).rejects.toThrow(
+    await expect(signupService.registerUser(userData)).rejects.toThrow(
       "A senha é obrigatória"
     );
   });
 
   it("should throw an error if the password confirmation is not provided", async () => {
-    const { authService, fakeImage } = makeSut();
+    const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       name: "valid_name",
@@ -118,13 +118,13 @@ describe("Create user", () => {
       images: [fakeImage as any],
     };
 
-    await expect(authService.registerUser(userData)).rejects.toThrow(
+    await expect(signupService.registerUser(userData)).rejects.toThrow(
       "A confirmação de senha é obrigatória"
     );
   });
 
   it("should throw an error if the image is provided", async () => {
-    const { authService, fakeImage } = makeSut();
+    const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       name: "valid_name",
@@ -134,13 +134,13 @@ describe("Create user", () => {
       confirmPassword: "valid_password",
     };
 
-    await expect(authService.registerUser(userData)).rejects.toThrow(
+    await expect(signupService.registerUser(userData)).rejects.toThrow(
       "A imagem é obrigatória"
     );
   });
 
   it("should throw an error if the password and the password confirmation is different", async () => {
-    const { authService, fakeImage } = makeSut();
+    const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       name: "valid_name",
@@ -151,7 +151,7 @@ describe("Create user", () => {
       images: [fakeImage as any],
     };
 
-    await expect(authService.registerUser(userData)).rejects.toThrow(
+    await expect(signupService.registerUser(userData)).rejects.toThrow(
       "As senhas são diferentes"
     );
   });

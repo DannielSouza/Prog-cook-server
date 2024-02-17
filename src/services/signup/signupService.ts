@@ -1,13 +1,15 @@
 import bcrypt from "bcrypt";
 import { uploadImage } from "../../helpers/imageUploader";
-import { TUserRequest, UserDTO } from "../../types/UserTypes";
+import { TUserSignupRequest, UserDTO } from "../../types/UserTypes";
 import { IAuthRepository } from "../../repositories/IAuthRepository";
 import { User } from "@prisma/client";
+import { generateRandomSalt } from "../../helpers/generateRandomSalt";
+import { generateSessionToken } from "../../helpers/generateSessionToken";
 
-class AuthService {
+class SignupService {
   constructor(public authRepository: IAuthRepository) {}
 
-  registerUser = async (user: TUserRequest): Promise<User> => {
+  registerUser = async (user: TUserSignupRequest): Promise<User> => {
     const { name, email, bio, password, confirmPassword, images } = user;
     try {
       if (!name) {
@@ -46,7 +48,7 @@ class AuthService {
         );
       }
 
-      const user = await this.authRepository.create({
+      await this.authRepository.create({
         email,
         name,
         imageUrl,
@@ -54,11 +56,18 @@ class AuthService {
         password: passwordHash,
       } as UserDTO);
 
-      return user;
+      const tokenSalt = generateRandomSalt();
+      const sessionToken = generateSessionToken(tokenSalt, password);
+      const userWithToken = await this.authRepository.addSessionToken(
+        email,
+        sessionToken
+      );
+
+      return userWithToken;
     } catch (error) {
       throw new Error(error.message);
     }
   };
 }
 
-export { AuthService };
+export { SignupService };

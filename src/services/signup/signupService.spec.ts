@@ -1,5 +1,5 @@
-import { authRepositoryInMemory } from "../../repositories/in-memory/authReposotory";
-import { AuthService } from "./authService";
+import { authRepositoryInMemory } from "../../repositories/in-memory/userReposotory";
+import { AuthService } from "./signupService";
 import bcrypt from "bcrypt";
 import * as fs from "fs";
 import * as path from "path";
@@ -119,7 +119,7 @@ describe("Create user", () => {
     };
 
     await expect(authService.registerUser(userData)).rejects.toThrow(
-      "A confirmação de senha é obrigatório"
+      "A confirmação de senha é obrigatória"
     );
   });
 

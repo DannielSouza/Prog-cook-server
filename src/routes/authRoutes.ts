@@ -1,4 +1,4 @@
-import { register } from "../controller/authController";
+import { register } from "../controller/signup/signupController";
 import express from "express";
 import multer from "multer";
 

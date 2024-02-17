@@ -2,11 +2,12 @@ import bcrypt from "bcrypt";
 import { uploadImage } from "../../helpers/imageUploader";
 import { TUserRequest, UserDTO } from "../../types/UserTypes";
 import { IAuthRepository } from "../../repositories/IAuthRepository";
+import { User } from "@prisma/client";
 
 class AuthService {
   constructor(public authRepository: IAuthRepository) {}
 
-  registerUser = async (user: TUserRequest) => {
+  registerUser = async (user: TUserRequest): Promise<User> => {
     const { name, email, bio, password, confirmPassword, images } = user;
     try {
       if (!name) {
@@ -15,14 +16,14 @@ class AuthService {
       if (!email) {
         throw new Error("O e-mail é obrigatório");
       }
-      if (!images && !images?.[0]) {
+      if (!images || !images?.[0]) {
         throw new Error("A imagem é obrigatória");
       }
       if (!password) {
         throw new Error("A senha é obrigatória");
       }
       if (!confirmPassword) {
-        throw new Error("A confirmação de senha é obrigatório");
+        throw new Error("A confirmação de senha é obrigatória");
       }
       if (password !== confirmPassword) {
         throw new Error("As senhas são diferentes");
@@ -55,7 +56,7 @@ class AuthService {
 
       return user;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }
   };
 }

@@ -11,12 +11,13 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String @unique
-  imageUrl String
-  bio      String
-  password String
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  imageUrl     String
+  bio          String
+  password     String
+  sessionToken String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -4,12 +4,17 @@ import bcrypt from "bcrypt";
 import * as fs from "fs";
 import * as path from "path";
 import * as imageUploader from "../../helpers/imageUploader";
+import crypto from "crypto";
+import * as generateRandomSalt from "../../helpers/generateRandomSalt";
+import * as generateSessionToken from "../../helpers/generateSessionToken";
 
 jest.mock("bcrypt");
 jest.mock("firebase-admin");
 jest.mock("../../helpers/imageUploader");
+jest.mock("../../helpers/generateRandomSalt");
+jest.mock("../../helpers/generateSessionToken");
 
-describe("Create user", () => {
+describe("Create User Service", () => {
   const makeSut = () => {
     (bcrypt.genSalt as jest.Mock).mockResolvedValue("test");
     (bcrypt.hash as jest.Mock).mockResolvedValue("test");
@@ -24,19 +29,21 @@ describe("Create user", () => {
     return { fakeImage, signupService, authRepository };
   };
 
-  it("should be able to create a new user", async () => {
+  it("should be able to signup a new user", async () => {
     const { signupService, fakeImage } = makeSut();
 
     const userData: any = {
       name: "valid_name",
       bio: "valid_bio",
-      email: "valid_email@mail.com",
+      email: `${crypto.randomUUID()}@any_email.com`,
       password: "valid_password",
       confirmPassword: "valid_password",
       images: [fakeImage as any],
     };
 
     const user = await signupService.registerUser(userData);
+    expect(generateRandomSalt.generateRandomSalt).toHaveBeenCalled();
+    expect(generateSessionToken.generateSessionToken).toHaveBeenCalled();
     expect(imageUploader.uploadImage).toHaveBeenCalled();
     expect(user).toHaveProperty("id");
   });

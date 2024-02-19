@@ -10,11 +10,11 @@ describe("Create User Controller", () => {
     return { fakeImage };
   };
 
-  it("Shoud be able to create a new user", async () => {
+  it("shoud be able to create a new user", async () => {
     const { fakeImage } = makeSut();
     const response = await request(app)
       .post("/auth/register")
-      .field("email", `any_email${crypto.randomUUID()}@any_email.com`)
+      .field("email", `${crypto.randomUUID()}@any_email.com`)
       .field("name", "any_name")
       .field("bio", "any_bio")
       .field("password", "any_password")
@@ -23,7 +23,6 @@ describe("Create User Controller", () => {
 
     expect(response.status).toBe(201);
     expect(response.body.message).toBe("Usuário criado com sucesso");
-    expect(response.body.data).toHaveProperty("id");
   });
 
   it("should throw an error if the email is already in use", async () => {

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { uploadImage } from "../../helpers/imageUploader";
 import { TUserSignupRequest, UserDTO } from "../../types/UserTypes";
-import { IAuthRepository } from "../../repositories/IAuthRepository";
+import { IAuthRepository } from "../../repositories/IUserRepository";
 import { User } from "@prisma/client";
 import { generateRandomSalt } from "../../helpers/generateRandomSalt";
 import { generateSessionToken } from "../../helpers/generateSessionToken";

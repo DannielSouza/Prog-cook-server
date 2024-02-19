@@ -6,4 +6,5 @@ export interface IAuthRepository {
   exists(email: string): Promise<Boolean>;
   addSessionToken(email: string, sessionToken: string): Promise<User>;
   findByEmail(email: string): Promise<User | null>;
+  logout(email: string, sessionToken: string): Promise<User>;
 }

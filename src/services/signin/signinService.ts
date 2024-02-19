@@ -1,4 +1,4 @@
-import { IAuthRepository } from "../../repositories/IAuthRepository";
+import { IAuthRepository } from "../../repositories/IUserRepository";
 import { TUserSigninRequest } from "../../types/UserTypes";
 import bcrypt from "bcrypt";
 import { generateRandomSalt } from "../../helpers/generateRandomSalt";

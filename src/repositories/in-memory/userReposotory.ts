@@ -1,4 +1,4 @@
-import { IAuthRepository } from "repositories/IAuthRepository";
+import { IAuthRepository } from "repositories/IUserRepository";
 import { UserDTO } from "../../types/UserTypes";
 import { User } from "@prisma/client";
 import { randomUUID } from "crypto";
@@ -54,5 +54,19 @@ export class authRepositoryInMemory implements IAuthRepository {
   async exists(email: string) {
     const user = this.users.some((user) => user.email === email);
     return !!user;
+  }
+
+  async logout(email: string, sessionToken: string) {
+    const index = this.users.findIndex((user) => user.email === email);
+
+    const updatedSessionTokens = this.users[index].sessionToken.filter(
+      (token) => token !== sessionToken
+    );
+    this.users[index] = {
+      ...this.users[index],
+      sessionToken: updatedSessionTokens,
+    };
+
+    return this.users[index];
   }
 }

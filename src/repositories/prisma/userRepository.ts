@@ -1,4 +1,4 @@
-import { IAuthRepository } from "../IAuthRepository";
+import { IAuthRepository } from "../IUserRepository";
 import { db } from "../../database/db";
 import { UserDTO } from "../../types/UserTypes";
 
@@ -42,5 +42,24 @@ export class PrismaAuthRepository implements IAuthRepository {
     });
 
     return !!user;
+  }
+
+  async logout(email: string, sessionToken: string) {
+    const user = await db.user.findUnique({
+      where: { email },
+    });
+
+    const updatedSessionTokens = user.sessionToken.filter(
+      (token) => token !== sessionToken
+    );
+
+    const updatedUser = await db.user.update({
+      where: { email },
+      data: {
+        sessionToken: updatedSessionTokens,
+      },
+    });
+
+    return updatedUser;
   }
 }

@@ -31,8 +31,8 @@ export class authRepositoryInMemory implements IAuthRepository {
         ...this.users[index],
         sessionToken:
           this.users?.[index]?.sessionToken?.length > 0
-            ? [...this.users[index].sessionToken]
-            : [],
+            ? [...this.users[index].sessionToken, sessionToken]
+            : [sessionToken],
       };
 
       this.users[index] = updatedUser;

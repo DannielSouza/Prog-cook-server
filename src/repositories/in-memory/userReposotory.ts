@@ -4,7 +4,19 @@ import { User } from "@prisma/client";
 import { randomUUID } from "crypto";
 
 export class authRepositoryInMemory implements IAuthRepository {
-  private users: User[] = [];
+  private users: User[] = [
+    {
+      id: "test_id",
+      email: "valid_email@mail.com",
+      password: "valid_password",
+      name: "valid_name",
+      bio: "valid_bio",
+      imageUrl: "valid_imageUrl",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      sessionToken: ["valid_sessionToken"],
+    },
+  ];
 
   async findByEmail(email: string) {
     const user = this.users.find((user) => user.email === email);
@@ -17,7 +29,10 @@ export class authRepositoryInMemory implements IAuthRepository {
     if (index !== -1) {
       const updatedUser = {
         ...this.users[index],
-        sessionToken: [...this.users[index].sessionToken, sessionToken],
+        sessionToken:
+          this.users?.[index]?.sessionToken?.length > 0
+            ? [...this.users[index].sessionToken]
+            : [],
       };
 
       this.users[index] = updatedUser;

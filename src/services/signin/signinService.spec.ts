@@ -33,4 +33,36 @@ describe("Login User Service", () => {
     expect(bcrypt.compare).toHaveBeenCalled();
     expect(user).toHaveProperty("id");
   });
+
+  it("should throw an error if the email is not provided", async () => {
+    const { signinService } = makeSut();
+
+    const userData: any = {
+      password: "valid_password",
+    };
+
+    try {
+      await signinService.loginUser(userData);
+      fail("Expected the promise to be rejected.");
+    } catch (error) {
+      console.error("Error:", error.message);
+      expect(error.message).toBe("O e-mail é obrigatório");
+    }
+  });
+
+  it("should throw an error if the password is not provided", async () => {
+    const { signinService } = makeSut();
+
+    const userData: any = {
+      email: "valid_email@mail.com",
+    };
+
+    try {
+      await signinService.loginUser(userData);
+      fail("Expected the promise to be rejected.");
+    } catch (error) {
+      console.error("Error:", error.message);
+      expect(error.message).toBe("A senha é obrigatória");
+    }
+  });
 });

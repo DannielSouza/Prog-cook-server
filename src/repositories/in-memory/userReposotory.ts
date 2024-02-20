@@ -1,9 +1,9 @@
-import { IAuthRepository } from "repositories/IUserRepository";
+import { IUserRepository } from "repositories/IUserRepository";
 import { UserDTO } from "../../types/UserTypes";
 import { User } from "@prisma/client";
 import { randomUUID } from "crypto";
 
-export class authRepositoryInMemory implements IAuthRepository {
+export class UserRepositoryInMemory implements IUserRepository {
   private users: User[] = [
     {
       id: "test_id",

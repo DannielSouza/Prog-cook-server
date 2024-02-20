@@ -1,13 +1,13 @@
 import bcrypt from "bcrypt";
 import { uploadImage } from "../../helpers/imageUploader";
 import { TUserSignupRequest, UserDTO } from "../../types/UserTypes";
-import { IAuthRepository } from "../../repositories/IUserRepository";
+import { IUserRepository } from "../../repositories/IUserRepository";
 import { User } from "@prisma/client";
 import { generateRandomSalt } from "../../helpers/generateRandomSalt";
 import { generateSessionToken } from "../../helpers/generateSessionToken";
 
 class SignupService {
-  constructor(public authRepository: IAuthRepository) {}
+  constructor(public userRepository: IUserRepository) {}
 
   registerUser = async (user: TUserSignupRequest): Promise<User> => {
     const { name, email, bio, password, confirmPassword, images } = user;
@@ -31,7 +31,7 @@ class SignupService {
         throw new Error("As senhas são diferentes");
       }
 
-      const isUserExist = await this.authRepository.exists(email);
+      const isUserExist = await this.userRepository.exists(email);
 
       if (isUserExist) {
         throw new Error("O e-mail já está em uso");
@@ -48,7 +48,7 @@ class SignupService {
         );
       }
 
-      await this.authRepository.create({
+      await this.userRepository.create({
         email,
         name,
         imageUrl,
@@ -58,7 +58,7 @@ class SignupService {
 
       const tokenSalt = generateRandomSalt();
       const sessionToken = generateSessionToken(tokenSalt, password);
-      const userWithToken = await this.authRepository.addSessionToken(
+      const userWithToken = await this.userRepository.addSessionToken(
         email,
         sessionToken
       );

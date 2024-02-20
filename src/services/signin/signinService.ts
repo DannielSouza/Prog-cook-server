@@ -1,11 +1,11 @@
-import { IAuthRepository } from "../../repositories/IUserRepository";
+import { IUserRepository } from "../../repositories/IUserRepository";
 import { TUserSigninRequest } from "../../types/UserTypes";
 import bcrypt from "bcrypt";
 import { generateRandomSalt } from "../../helpers/generateRandomSalt";
 import { generateSessionToken } from "../../helpers/generateSessionToken";
 
 class SigninService {
-  constructor(public authRepository: IAuthRepository) {}
+  constructor(public userRepository: IUserRepository) {}
 
   loginUser = async (user: TUserSigninRequest) => {
     try {
@@ -18,7 +18,7 @@ class SigninService {
         throw new Error("A senha é obrigatória");
       }
 
-      const currentUser = await this.authRepository.findByEmail(email);
+      const currentUser = await this.userRepository.findByEmail(email);
       if (!currentUser) {
         throw new Error("Usuário não encontrado");
       }
@@ -33,7 +33,7 @@ class SigninService {
 
       const salt = generateRandomSalt();
       const sessionToken = generateSessionToken(salt, password);
-      const userWithToken = await this.authRepository.addSessionToken(
+      const userWithToken = await this.userRepository.addSessionToken(
         email,
         sessionToken
       );

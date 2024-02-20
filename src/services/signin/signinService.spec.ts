@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { authRepositoryInMemory } from "../../repositories/in-memory/userReposotory";
+import { UserRepositoryInMemory } from "../../repositories/in-memory/userReposotory";
 import { SigninService } from "./signinService";
 import { User } from "@prisma/client";
 import * as generateRandomSalt from "../../helpers/generateRandomSalt";
@@ -13,9 +13,9 @@ describe("Login User Service", () => {
   const makeSut = () => {
     (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
-    const authRepository = new authRepositoryInMemory();
-    const signinService = new SigninService(authRepository);
-    return { signinService, authRepository };
+    const userRepository = new UserRepositoryInMemory();
+    const signinService = new SigninService(userRepository);
+    return { signinService, userRepository };
   };
 
   it("shoud be able to signin a user", async () => {

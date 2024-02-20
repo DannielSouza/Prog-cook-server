@@ -1,8 +1,8 @@
-import { IAuthRepository } from "../IUserRepository";
+import { IUserRepository } from "../IUserRepository";
 import { db } from "../../database/db";
 import { UserDTO } from "../../types/UserTypes";
 
-export class PrismaAuthRepository implements IAuthRepository {
+export class PrismaUserRepository implements IUserRepository {
   async addSessionToken(email: string, sessionToken: string) {
     const user = await db.user.update({
       where: {

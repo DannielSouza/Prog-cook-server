@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { SignupService } from "../../services/signup/signupService";
-import { PrismaAuthRepository } from "../../repositories/prisma/userRepository";
+import { PrismaUserRepository } from "../../repositories/prisma/userRepository";
 
-const prismaAuthRepository = new PrismaAuthRepository();
-const signupService = new SignupService(prismaAuthRepository);
+const prismaUserRepository = new PrismaUserRepository();
+const signupService = new SignupService(prismaUserRepository);
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, bio, password, confirmPassword } = req.body;

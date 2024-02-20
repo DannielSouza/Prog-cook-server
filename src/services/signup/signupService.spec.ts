@@ -1,4 +1,4 @@
-import { authRepositoryInMemory } from "../../repositories/in-memory/userReposotory";
+import { UserRepositoryInMemory } from "../../repositories/in-memory/userReposotory";
 import { SignupService } from "./signupService";
 import bcrypt from "bcrypt";
 import * as fs from "fs";
@@ -24,9 +24,9 @@ describe("Create User Service", () => {
       path.resolve("./src/services", "imageTest.png")
     );
 
-    const authRepository = new authRepositoryInMemory();
-    const signupService = new SignupService(authRepository);
-    return { fakeImage, signupService, authRepository };
+    const userRepository = new UserRepositoryInMemory();
+    const signupService = new SignupService(userRepository);
+    return { fakeImage, signupService, userRepository };
   };
 
   it("should be able to signup a new user", async () => {
@@ -49,8 +49,8 @@ describe("Create User Service", () => {
   });
 
   it("should throw an error if the email is already in use", async () => {
-    const { signupService, fakeImage, authRepository } = makeSut();
-    authRepository.exists = jest.fn().mockResolvedValue(true);
+    const { signupService, fakeImage, userRepository } = makeSut();
+    userRepository.exists = jest.fn().mockResolvedValue(true);
 
     const userData: any = {
       name: "valid_name",

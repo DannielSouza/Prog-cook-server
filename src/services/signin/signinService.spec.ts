@@ -18,7 +18,7 @@ describe("Login User Service", () => {
     return { signinService, userRepository };
   };
 
-  it("shoud be able to signin a user", async () => {
+  it("should be able to signin a user", async () => {
     const { signinService } = makeSut();
 
     const userData: any = {

@@ -14,7 +14,7 @@ class LogoutService {
         throw new Error("O e-mail é obrigatório");
       }
       if (!sessionToken) {
-        throw new Error("o session token é obrigatório");
+        throw new Error("O session token é obrigatório");
       }
 
       const currentUser = await this.userRepository.findByEmail(email);

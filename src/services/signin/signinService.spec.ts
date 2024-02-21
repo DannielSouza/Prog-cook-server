@@ -45,7 +45,6 @@ describe("Login User Service", () => {
       await signinService.loginUser(userData);
       fail("Expected the promise to be rejected.");
     } catch (error) {
-      console.error("Error:", error.message);
       expect(error.message).toBe("O e-mail é obrigatório");
     }
   });

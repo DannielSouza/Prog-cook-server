@@ -22,4 +22,34 @@ describe("Logout User Service", () => {
     );
     expect(existingSessionToken).toBe(false);
   });
+
+  it("should throw an error if the email is not provided", async () => {
+    const { logoutService } = makeSut();
+
+    const userData: any = {
+      sessionToken: "valid_sessionToken",
+    };
+
+    try {
+      await logoutService.logoutUser(userData);
+      fail("Expected the promise to be rejected.");
+    } catch (error) {
+      expect(error.message).toBe("O e-mail é obrigatório");
+    }
+  });
+
+  it("should throw an error if the session token is not provided", async () => {
+    const { logoutService } = makeSut();
+
+    const userData: any = {
+      email: "valid_email@mail.com",
+    };
+
+    try {
+      await logoutService.logoutUser(userData);
+      fail("Expected the promise to be rejected.");
+    } catch (error) {
+      expect(error.message).toBe("O session token é obrigatório");
+    }
+  });
 });

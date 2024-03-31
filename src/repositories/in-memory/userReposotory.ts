@@ -35,18 +35,4 @@ export class UserRepositoryInMemory implements IUserRepository {
     const user = this.users.some((user) => user.email === email);
     return !!user;
   }
-
-  async logout(email: string, sessionToken: string) {
-    const index = this.users.findIndex((user) => user.email === email);
-
-    const updatedSessionTokens = this.users[index].sessionToken.filter(
-      (token) => token !== sessionToken
-    );
-    this.users[index] = {
-      ...this.users[index],
-      sessionToken: updatedSessionTokens,
-    };
-
-    return this.users[index];
-  }
 }

@@ -22,7 +22,6 @@ describe("Create User Controller", () => {
       .attach("image", fakeImage);
 
     expect(response.status).toBe(201);
-    expect(response.body.message).toBe("Usuário criado com sucesso");
   });
 
   it("should throw an error if the email is already in use", async () => {

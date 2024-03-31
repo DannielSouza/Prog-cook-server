@@ -3,8 +3,6 @@ import { uploadImage } from "../../helpers/imageUploader";
 import { TUserSignupRequest, UserDTO } from "../../types/UserTypes";
 import { IUserRepository } from "../../repositories/IUserRepository";
 import { User } from "@prisma/client";
-import { generateRandomSalt } from "../../helpers/generateRandomSalt";
-import { generateSessionToken } from "../../helpers/generateSessionToken";
 
 class SignupService {
   constructor(public userRepository: IUserRepository) {}
@@ -48,7 +46,7 @@ class SignupService {
         );
       }
 
-      await this.userRepository.create({
+      const user = await this.userRepository.create({
         email,
         name,
         imageUrl,
@@ -56,14 +54,7 @@ class SignupService {
         password: passwordHash,
       } as UserDTO);
 
-      const tokenSalt = generateRandomSalt();
-      const sessionToken = generateSessionToken(tokenSalt, password);
-      const userWithToken = await this.userRepository.addSessionToken(
-        email,
-        sessionToken
-      );
-
-      return userWithToken;
+      return user;
     } catch (error) {
       throw new Error(error.message);
     }

@@ -9,7 +9,6 @@ describe("Login User Controller", () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Usuário autenticado com sucesso");
   });
 
   it("should throw an error if the email is not provided", async () => {

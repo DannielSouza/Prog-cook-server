@@ -1,8 +1,6 @@
 import { IUserRepository } from "../../repositories/IUserRepository";
 import { TUserSigninRequest } from "../../types/UserTypes";
 import bcrypt from "bcrypt";
-import { generateRandomSalt } from "../../helpers/generateRandomSalt";
-import { generateSessionToken } from "../../helpers/generateSessionToken";
 
 class SigninService {
   constructor(public userRepository: IUserRepository) {}
@@ -31,14 +29,7 @@ class SigninService {
         throw new Error("Senha inválida");
       }
 
-      const salt = generateRandomSalt();
-      const sessionToken = generateSessionToken(salt, password);
-      const userWithToken = await this.userRepository.addSessionToken(
-        email,
-        sessionToken
-      );
-
-      return userWithToken;
+      return currentUser;
     } catch (error) {
       throw new Error(error.message);
     }

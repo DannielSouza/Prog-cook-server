@@ -19,9 +19,7 @@ export const register = async (req: Request, res: Response) => {
       images: files,
     });
 
-    return res
-      .status(201)
-      .json({ message: "Usuário criado com sucesso", data: user });
+    return res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

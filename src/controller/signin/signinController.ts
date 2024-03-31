@@ -9,9 +9,7 @@ export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
     const user = await signinService.loginUser({ email, password });
-    return res
-      .status(200)
-      .json({ message: "Usuário autenticado com sucesso", data: user });
+    return res.status(200).json(user);
   } catch (error) {
     res.status(403).json({ message: error.message });
   }

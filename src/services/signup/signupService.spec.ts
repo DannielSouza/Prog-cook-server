@@ -5,14 +5,10 @@ import * as fs from "fs";
 import * as path from "path";
 import * as imageUploader from "../../helpers/imageUploader";
 import crypto from "crypto";
-import * as generateRandomSalt from "../../helpers/generateRandomSalt";
-import * as generateSessionToken from "../../helpers/generateSessionToken";
 
 jest.mock("bcrypt");
 jest.mock("firebase-admin");
 jest.mock("../../helpers/imageUploader");
-jest.mock("../../helpers/generateRandomSalt");
-jest.mock("../../helpers/generateSessionToken");
 
 describe("Create User Service", () => {
   const makeSut = () => {
@@ -42,8 +38,6 @@ describe("Create User Service", () => {
     };
 
     const user = await signupService.registerUser(userData);
-    expect(generateRandomSalt.generateRandomSalt).toHaveBeenCalled();
-    expect(generateSessionToken.generateSessionToken).toHaveBeenCalled();
     expect(imageUploader.uploadImage).toHaveBeenCalled();
     expect(user).toHaveProperty("id");
   });

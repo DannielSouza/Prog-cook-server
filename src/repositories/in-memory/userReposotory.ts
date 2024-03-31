@@ -23,26 +23,6 @@ export class UserRepositoryInMemory implements IUserRepository {
     return user ?? null;
   }
 
-  async addSessionToken(email: string, sessionToken: string) {
-    const index = this.users.findIndex((user) => user.email === email);
-
-    if (index !== -1) {
-      const updatedUser = {
-        ...this.users[index],
-        sessionToken:
-          this.users?.[index]?.sessionToken?.length > 0
-            ? [...this.users[index].sessionToken, sessionToken]
-            : [sessionToken],
-      };
-
-      this.users[index] = updatedUser;
-
-      return updatedUser;
-    }
-
-    return null;
-  }
-
   async create(user: UserDTO) {
     Object.assign(user, {
       id: randomUUID(),
